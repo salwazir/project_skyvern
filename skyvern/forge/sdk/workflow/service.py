@@ -615,7 +615,7 @@ class WorkflowService:
             organization_id=organization_id,
         )
         if workflow_run.status == WorkflowRunStatus.completed:
-            # Collect all step/block data
+            print("Saving successful run!")  # <--- Add this line
             blocks = await app.DATABASE.get_workflow_run_blocks(workflow_run.workflow_run_id)
             run_data = {
                 "run": workflow_run,
