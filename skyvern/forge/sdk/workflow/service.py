@@ -614,7 +614,16 @@ class WorkflowService:
             workflow_run_status=WorkflowRunStatus.completed,
             organization_id=organization_id,
         )
-
+if workflow_run.status == WorkflowRunStatus.completed:
+    # Collect all step/block data
+    blocks = await app.DATABASE.get_workflow_run_blocks(workflow_run.workflow_run_id)
+    run_data = {
+        "run": workflow_run,
+        "steps": blocks,
+        "outputs": getattr(workflow_run, "outputs", None),
+        "parameters": getattr(workflow_run, "parameters", None),
+    }
+    save_successful_run(run_data)
         return workflow_run
 
     async def create_workflow(
